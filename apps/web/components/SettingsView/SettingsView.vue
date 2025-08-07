@@ -167,6 +167,30 @@
           </span>
         </div>
       </UiAccordionItem>
+
+      <UiAccordionItem
+        v-model="vatValidation"
+        data-testid="settings-section"
+        summary-active-class="bg-neutral-100"
+        summary-class="w-full hover:bg-neutral-100 px-4 py-5 flex justify-between items-center select-none border-b"
+      >
+        <template #summary>
+          <h2 class="">Vat Number Validation</h2>
+        </template>
+        <UiFormLabel>
+          Validate VAT Number?
+        </UiFormLabel>
+        <SfSelect v-model="selectedVatNumberValidation" data-testid="editor-vat-number-validation-select">
+          <option
+            v-for="vatNumberOption in vatNumberSettingsOptions"
+            :key="vatNumberOption.key"
+            :value="vatNumberOption.key"
+            class="font-medium text-sm md:text-base"
+          >
+            {{ vatNumberOption.text }}
+          </option>
+        </SfSelect>
+      </UiAccordionItem>
     </div>
     <!-- <UiAccordionItem
       v-model="manufacturedTab"
@@ -210,8 +234,26 @@
   </div>
 </template>
 
+
 <script setup lang="ts">
-import { SfIconClose, SfIconInfo, SfInput, SfTooltip, SfSwitch } from '@storefront-ui/vue';
+import { SfSelect, SfIconClose, SfIconInfo, SfInput, SfTooltip, SfSwitch  } from '@storefront-ui/vue';
+const { updateSetting, getSetting } = useSiteSettings('vatNumberValidation');
+
+const vatNumberSettingsOptions = ref([
+  {
+    key: '0',
+    text: 'Yes',
+  },
+  {
+    key: '1',
+    text: 'No',
+  }
+]);
+
+const selectedVatNumberValidation = computed({
+  get: () => getSetting(),
+  set: (value) => updateSetting(value),
+});
 // import Multiselect from 'vue-multiselect';
 
 // const { fields, selectedFields} = useSiteConfiguration();
@@ -220,4 +262,5 @@ const { headerLogo, favicon, ogTitle, ogImg, useAvif, useWebp, closeDrawer } = u
 const branding = ref(false);
 const socialMedia = ref(false);
 const optimisation = ref(false);
+const vatValidation = ref(false);
 </script>
